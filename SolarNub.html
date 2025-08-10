@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon-32x32.png" type="image/x-icon/png">
     <title>SolarNub - Powering Your Future</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <style>
@@ -32,6 +33,7 @@
             width: 100%;
             top: 0;
             z-index: 100;
+            height: 80px;
         }
 
         nav {
@@ -40,11 +42,14 @@
             align-items: center;
             max-width: 1200px;
             margin: 0 auto;
+            height: 100%;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
+        .logo img {
+            height: 150px;
+            cursor: pointer;
+            object-fit: contain;
+            margin-top: 8px;
         }
 
         .nav-links {
@@ -62,8 +67,94 @@
             color: var(--accent-color);
         }
 
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 4px 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+
+        .hamburger.active div:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active div:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active div:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 250px;
+            height: 100%;
+            background-color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 2rem;
+            transition: right 0.3s ease-in-out;
+            z-index: 999;
+        }
+
+        .mobile-nav.active {
+            right: 0;
+        }
+
+        .mobile-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .mobile-nav a:hover {
+            color: var(--accent-color);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+            z-index: 998;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
         .content {
             margin-top: 5rem;
+            margin-bottom: 60px;
             padding: 2rem;
             max-width: 1200px;
             margin-left: auto;
@@ -71,7 +162,106 @@
             position: relative;
         }
 
-        /* New styles for benefits section */
+        /* Updated Hero Section Styles */
+        .hero-section {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+        }
+
+        .hero-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .hero-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            z-index: 3;
+        }
+
+        .hero-nav button {
+            background: rgba(255,255,255,0.3);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            margin: 0 1rem;
+            transition: background 0.3s ease;
+        }
+
+        .hero-nav button:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .hero-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 3;
+        }
+
+        .hero-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .hero-dot.active {
+            background: var(--accent-color);
+        }
+
         .benefits-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -85,37 +275,20 @@
             padding: 1.5rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        .benefit-card:hover {
-            transform: translateY(-5px);
+        .benefit-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .benefit-card i {
             color: var(--accent-color);
             font-size: 2rem;
             margin-bottom: 1rem;
-        }
-
-        .hero-section {
-            text-align: center;
-            padding: 3rem 0;
-            background: linear-gradient(rgba(44, 62, 80, 0.1), rgba(44, 62, 80, 0.05));
-            border-radius: 10px;
-            margin-bottom: 2rem;
-        }
-
-        .hero-section h1 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            margin-bottom: 1rem;
-        }
-
-        .hero-section p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 2rem auto;
-            color: #555;
         }
 
         .stat-highlight {
@@ -132,11 +305,14 @@
             grid-template-columns: 1fr 2fr;
             gap: 2rem;
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        .system-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        .system-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .system-image {
@@ -170,11 +346,14 @@
             border-radius: 5px;
             text-align: center;
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
 
-        .spec-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        .spec-item.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .spec-item i {
@@ -193,6 +372,14 @@
             font-weight: bold;
             margin-top: 1rem;
             transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .cta-button.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .cta-button:hover {
@@ -205,7 +392,25 @@
             color: white;
             padding: 2rem;
             text-align: center;
-            margin-top: 2rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 90px;
+            width: 100%;
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        footer.hide {
+            transform: translateY(100%);
+        }
+
+        footer p {
+            margin: 0;
+            width: 100%;
+            text-align: center;
         }
 
         .tab-container {
@@ -249,35 +454,648 @@
             position: relative;
         }
 
+        .about-content {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .about-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .about-section {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .about-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-container {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            height: 440px; /* Increased height to accommodate both rows */
+            margin: 40px 0;
+            border-radius: 20px;
+            background: #f8f9fa;
+            padding: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .gallery-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-row {
+            display: flex;
+            width: fit-content;
+            margin-bottom: 20px; /* Space between rows */
+        }
+
+        .gallery-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .gallery-row img {
+            width: 300px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .gallery-row img:hover {
+            transform: scale(1.1);
+            z-index: 1;
+        }
+
+        .gallery-row-1 {
+            animation: scrollGallery 40s linear infinite;
+        }
+
+        .gallery-row-2 {
+            animation: scrollGalleryReverse 40s linear infinite;
+        }
+
+        .gallery-row-1:hover, .gallery-row-2:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollGallery {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(calc(-300px * 6));
+            }
+        }
+
+        @keyframes scrollGalleryReverse {
+            0% {
+                transform: translateX(calc(-300px * 6));
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .detail-view {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+
+        .detail-view.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .detail-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            position: relative;
+        }
+
+        .detail-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .detail-content h2 {
+            margin-top: 1rem;
+        }
+
+        .detail-content p {
+            margin-top: 1rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .chat-button {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        .phone-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .phone-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* New styles for expanded content */
+        .info-section {
+            margin: 3rem 0;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .info-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .info-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .info-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 3px;
+            background: var(--accent-color);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--accent-color);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid var(--accent-color);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid white;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent white;
+        }
+
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid white;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent white transparent transparent;
+        }
+
+        .right::after {
+            left: -16px;
+        }
+
+        .timeline-content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .testimonial {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .testimonial.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+            border: 3px solid var(--accent-color);
+        }
+
+        .testimonial-rating {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .faq-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .faq-question {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            background: white;
+            padding: 1rem;
+            display: none;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .contact-form.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
+            .timeline::after {
+                left: 31px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            .timeline-item::after {
+                left: 15px;
+            }
+
+            .left::before, .right::before {
+                left: 60px;
+                border: medium solid white;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent white transparent transparent;
+            }
+
+            .right {
+                left: 0%;
+            }
+
             .system-card {
                 grid-template-columns: 1fr;
             }
+        }
 
-            .nav-links {
-                display: none;
-            }
+        /* Translation Button Styles */
+        .translation-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .translation-toggle:hover {
+            transform: scale(1.05);
+            background-color: #1a2a3a;
+        }
+
+        .translation-toggle i {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .translation-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        /* Language-specific classes */
+        .lang-th {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .lang-th.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .lang-en {
+            display: block;
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .lang-en.hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
         }
     </style>
 </head>
 <body>
+    <div id="loading-screen">
+        <div class="spinner"></div>
+    </div>
+
     <header>
         <nav>
-            <div class="logo">SolarNub</div>
+            <div class="logo">
+                <img src="SolarLargeHeaderLogo.png" alt="SolarNub Logo" onclick="showTab('home')">
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
             <div class="nav-links">
                 <a href="#" onclick="showTab('home')">Home</a>
                 <a href="#" onclick="showTab('5kw')">5kW Systems</a>
                 <a href="#" onclick="showTab('10kw')">10kW Systems</a>
+                <a href="#" onclick="showTab('about')">About Us</a>
                 <a href="#" onclick="showTab('contact')">Contact</a>
             </div>
         </nav>
     </header>
 
+    <div class="mobile-nav" id="mobile-nav">
+        <a href="#" onclick="showTab('home')">Home</a>
+        <a href="#" onclick="showTab('5kw')">5kW Systems</a>
+        <a href="#" onclick="showTab('10kw')">10kW Systems</a>
+        <a href="#" onclick="showTab('about')">About Us</a>
+        <a href="#" onclick="showTab('contact')">Contact</a>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
     <div class="content">
         <div id="home" class="tab-content active">
+            <!-- Updated Hero Section with Image Gallery -->
             <div class="hero-section">
-                <h1>Power Your Future with Solar Energy</h1>
-                <p>Join the sustainable energy revolution and take control of your power consumption with SolarNub's advanced solar solutions.</p>
+                <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')">
+                    <div class="hero-content">
+                        <h1>Power Your Future with Solar Energy</h1>
+                        <p>Join the sustainable energy revolution and take control of your power consumption with SolarNub's advanced solar solutions.</p>
+                        <a href="#" class="cta-button" onclick="showTab('5kw')">Explore Systems</a>
+                    </div>
+                </div>
+                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')">
+                    <div class="hero-content">
+                        <h1>Save Money with Solar Power</h1>
+                        <p>Reduce your electricity bills by up to 70% with our efficient solar systems.</p>
+                        <a href="#" class="cta-button" onclick="showTab('5kw')">View Packages</a>
+                    </div>
+                </div>
+                <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1487621167305-5d248087c724?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80')">
+                    <div class="hero-content">
+                        <h1>Professional Installation</h1>
+                        <a href="#" class="cta-button" onclick="showTab('contact')">Get a Quote</a>
+                    </div>
+                </div>
+                
+                <div class="hero-nav">
+                    <button onclick="prevSlide()"><i class="fas fa-chevron-left"></i></button>
+                    <button onclick="nextSlide()"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                
+                <div class="hero-dots">
+                    <div class="hero-dot active" onclick="goToSlide(0)"></div>
+                    <div class="hero-dot" onclick="goToSlide(1)"></div>
+                    <div class="hero-dot" onclick="goToSlide(2)"></div>
+                </div>
             </div>
 
             <h2>Why Solar Power is Essential Today</h2>
@@ -323,6 +1141,176 @@
                     </div>
                 </div>
             </div>
+
+            <!-- New Expanded Homepage Content -->
+            <div class="info-section">
+                <h2>How Solar Energy Works</h2>
+                <p>Solar panels convert sunlight into electricity through photovoltaic cells. When sunlight hits these cells, it creates an electric field across layers of silicon, generating direct current (DC) electricity. An inverter then converts this DC electricity into alternating current (AC) that powers your home.</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    <div>
+                        <h3 style="color: var(--primary-color);">1. Sunlight Absorption</h3>
+                        <p>High-efficiency solar panels absorb photons from sunlight, even on cloudy days.</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--primary-color);">2. Energy Conversion</h3>
+                        <p>Photovoltaic cells convert sunlight into direct current (DC) electricity.</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--primary-color);">3. Power Conversion</h3>
+                        <p>An inverter converts DC electricity into usable AC electricity for your home.</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--primary-color);">4. Energy Distribution</h3>
+                        <p>Electricity powers your home, with excess energy stored in batteries or fed back to the grid.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>Our Installation Process</h2>
+                <div class="timeline">
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <h3>Initial Consultation</h3>
+                            <p>We assess your energy needs and roof suitability through a free consultation.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <h3>Custom System Design</h3>
+                            <p>Our engineers create a personalized solar solution for your home.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <h3>Permitting & Approvals</h3>
+                            <p>We handle all paperwork and approvals with your local utility company.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <h3>Professional Installation</h3>
+                            <p>Our certified technicians install your system in 1-3 days.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="timeline-content">
+                            <h3>Inspection & Activation</h3>
+                            <p>Final inspections are completed before system activation.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="timeline-content">
+                            <h3>Ongoing Support</h3>
+                            <p>We provide monitoring and maintenance for optimal performance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>Customer Testimonials</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial">
+                        <div class="testimonial-header">
+                            <img src="IMG_4587.jpg" alt="Sarah J." class="testimonial-img">
+                            <div>
+                                <h3>UltimateNipoonJane.</h3>
+                                <div class="testimonial-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p>"SolarNub transformed our energy usage. Our bills have dropped by 80% and the installation was seamless. Highly recommend their professional team!"</p>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-header">
+                            <img src="IMG_4588.jpg" alt="Michael T." class="testimonial-img">
+                            <div>
+                                <h3>mrSolarNUBCEO</h3>
+                                <div class="testimonial-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p>"The 10kW system has been perfect for our family home and small business. SolarNub's after-sales support is exceptional."</p>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-header">
+                            <img src="IMG_4585.jpg" alt="Lisa M." class="testimonial-img">
+                            <div>
+                                <h3>TheBestNipoon'sPicture</h3>
+                                <div class="testimonial-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p>"I was hesitant about solar, but SolarNub made the process easy. My 5kW system produces more energy than I expected!"</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How long do solar panels last?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Most solar panels come with a 25-year performance warranty and can continue producing electricity for 30-40 years. The efficiency gradually decreases by about 0.5% per year.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What maintenance do solar panels require?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Solar systems require minimal maintenance. We recommend occasional cleaning (especially in dusty areas) and annual inspections to ensure optimal performance.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Do solar panels work during power outages?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Standard grid-tied systems shut down during outages for safety. However, with battery backup systems, you can maintain power during outages.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How much roof space do I need?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>A 5kW system typically requires about 25-35 square meters, while a 10kW system needs 50-70 square meters, depending on panel efficiency.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What financing options are available?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We offer various options including cash purchases, solar loans with low interest rates, and lease/PPA agreements with no upfront costs.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="5kw" class="tab-content">
@@ -348,9 +1336,61 @@
                             <h3>2-3 Bedroom</h3>
                             <p>Ideal home size</p>
                         </div>
+                        <div class="spec-item">
+                            <i class="fas fa-battery-full"></i>
+                            <h3>Optional Storage</h3>
+                            <p>Battery backup available</p>
+                        </div>
                     </div>
                     <a href="#" class="cta-button" onclick="showTab('contact')">Get Quote</a>
                 </div>
+            </div>
+
+            <div class="info-section">
+                <h2>5kW System Details</h2>
+                <p>Our 5kW solar system is designed for households consuming between 15-25kWh per day. This system typically produces enough energy to cover 70-100% of an average home's electricity needs, depending on usage patterns and sunlight availability.</p>
+                
+                <h3 style="margin-top: 1.5rem; color: var(--primary-color);">Key Features:</h3>
+                <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;">Premium monocrystalline solar panels with 22-24% efficiency</li>
+                    <li style="margin-bottom: 0.5rem;">Smart inverter technology with real-time monitoring</li>
+                    <li style="margin-bottom: 0.5rem;">Weather-resistant mounting system with 25-year warranty</li>
+                    <li style="margin-bottom: 0.5rem;">Option to add battery storage for backup power</li>
+                    <li style="margin-bottom: 0.5rem;">Compatible with net metering programs</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h2>Performance Estimates</h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                        <thead>
+                            <tr style="background-color: var(--primary-color); color: white;">
+                                <th style="padding: 1rem; text-align: left;">Season</th>
+                                <th style="padding: 1rem; text-align: left;">Daily Production</th>
+                                <th style="padding: 1rem; text-align: left;">Monthly Savings*</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 1rem;">Summer</td>
+                                <td style="padding: 1rem;">25-30 kWh</td>
+                                <td style="padding: 1rem;">$120-$150</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 1rem;">Spring/Fall</td>
+                                <td style="padding: 1rem;">20-25 kWh</td>
+                                <td style="padding: 1rem;">$90-$120</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 1rem;">Winter</td>
+                                <td style="padding: 1rem;">15-20 kWh</td>
+                                <td style="padding: 1rem;">$70-$100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">*Savings estimates based on average electricity rates of $0.16/kWh</p>
             </div>
         </div>
 
@@ -377,8 +1417,131 @@
                             <h3>4-5 Bedroom</h3>
                             <p>Ideal home size</p>
                         </div>
+                        <div class="spec-item">
+                            <i class="fas fa-battery-full"></i>
+                            <h3>Optional Storage</h3>
+                            <p>Battery backup available</p>
+                        </div>
                     </div>
                     <a href="#" class="cta-button" onclick="showTab('contact')">Get Quote</a>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h2>10kW System Details</h2>
+                <p>Our 10kW solar system is designed for larger homes or small businesses consuming between 35-50kWh per day. This robust system can often produce surplus energy that can be fed back into the grid or stored in batteries for later use.</p>
+                
+                <h3 style="margin-top: 1.5rem; color: var(--primary-color);">Key Features:</h3>
+                <ul style="margin-top: 1rem; padding-left: 1.5rem;">
+                    <li style="margin-bottom: 0.5rem;">Industrial-grade monocrystalline solar panels with 22-24% efficiency</li>
+                    <li style="margin-bottom: 0.5rem;">Dual inverter system for optimal performance</li>
+                    <li style="margin-bottom: 0.5rem;">Commercial-grade mounting system with 30-year warranty</li>
+                    <li style="margin-bottom: 0.5rem;">Expandable battery storage options</li>
+                    <li style="margin-bottom: 0.5rem;">Advanced monitoring with energy production alerts</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h2>Performance Estimates</h2>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                        <thead>
+                            <tr style="background-color: var(--primary-color); color: white;">
+                                <th style="padding: 1rem; text-align: left;">Season</th>
+                                <th style="padding: 1rem; text-align: left;">Daily Production</th>
+                                <th style="padding: 1rem; text-align: left;">Monthly Savings*</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 1rem;">Summer</td>
+                                <td style="padding: 1rem;">50-60 kWh</td>
+                                <td style="padding: 1rem;">$240-$300</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 1rem;">Spring/Fall</td>
+                                <td style="padding: 1rem;">40-50 kWh</td>
+                                <td style="padding: 1rem;">$180-$240</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 1rem;">Winter</td>
+                                <td style="padding: 1rem;">30-40 kWh</td>
+                                <td style="padding: 1rem;">$140-$200</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">*Savings estimates based on average electricity rates of $0.16/kWh</p>
+            </div>
+        </div>
+
+        <div id="about" class="tab-content">
+            <h1>About SolarNub</h1>
+            <div class="about-content">
+                <h2>Our Mission</h2>
+                <p>At SolarNub, we're committed to accelerating the world's transition to sustainable energy. Founded in 2015, we've grown from a small startup to a leading provider of residential and commercial solar solutions across the region. Our mission is to make solar energy accessible, affordable, and easy to adopt for everyone.</p>
+            </div>
+
+            <div class="about-section">
+                <h2>Our Story</h2>
+                <p>SolarNub began when our founder, Alex Johnson, installed his first solar panel system and realized how needlessly complex and expensive the process was. Determined to make solar energy more accessible, he assembled a team of engineers, energy experts, and customer service professionals to create a better solar experience.</p>
+                <p>What started as a three-person operation in a small garage has grown into a company with over 150 employees serving thousands of satisfied customers. Despite our growth, we've maintained our commitment to personalized service and high-quality installations.</p>
+            </div>
+
+            <div class="about-section">
+                <h2>Why Choose Us</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <i class="fas fa-award"></i>
+                        <h3>Certified Excellence</h3>
+                        <p>All our installers are NABCEP-certified, ensuring the highest quality workmanship and system performance.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>25-Year Warranty</h3>
+                        <p>We stand behind our work with industry-leading warranties on both equipment and installation.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <h3>Price Match Guarantee</h3>
+                        <p>We'll match any legitimate written quote for comparable equipment and service.</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Performance Monitoring</h3>
+                        <p>Our smart monitoring systems ensure your system is always performing at its best.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-container">
+                <div class="gallery-row gallery-row-1">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 1" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 1')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 2" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 2')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 3" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 3')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 4" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 4')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 5" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 5')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 6" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 6')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 1" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 1')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 2" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 2')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 3" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 3')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 4" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 4')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 5" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 5')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 6" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 6')">
+                </div>
+                <div class="gallery-row gallery-row-2">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 7" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 7')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 8" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 8')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 9" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 9')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 10" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 10')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 11" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 11')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 12" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 12')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 7" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 7')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 8" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 8')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 9" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 9')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 10" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 10')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 11" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 11')">
+                    <img src="SolarRowTestV1.png" alt="Solar Installation 12" onclick="showDetail('SolarRowTestV1.png', 'Solar Installation 12')">
                 </div>
             </div>
         </div>
@@ -406,29 +1569,112 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" rows="5" required></textarea>
+                    <label for="message">Your Message</label>
+                    <textarea id="message"></textarea>
                 </div>
-                <button type="submit" class="cta-button">Send Message</button>
+                <button type="submit" class="cta-button">Submit</button>
             </form>
+
+            <div class="info-section" style="margin-top: 3rem;">
+                <h2>Visit Our Office</h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                    <div>
+                        <h3 style="color: var(--primary-color); margin-bottom: 1rem;"><i class="fas fa-map-marker-alt" style="margin-right: 0.5rem;"></i> Headquarters</h3>
+                        <p>123 Solar Way<br>Sunnyville, CA 90210<br>United States</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--primary-color); margin-bottom: 1rem;"><i class="fas fa-clock" style="margin-right: 0.5rem;"></i> Business Hours</h3>
+                        <p>Monday-Friday: 8am-6pm<br>Saturday: 9am-2pm<br>Sunday: Closed</p>
+                    </div>
+                    <div>
+                        <h3 style="color: var(--primary-color); margin-bottom: 1rem;"><i class="fas fa-phone" style="margin-right: 0.5rem;"></i> Contact Info</h3>
+                        <p>Phone: (800) 555-SOLAR<br>Email: info@solarNub.com<br>Emergency: (800) 555-HELP</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <footer>
-        <p>&copy; 2025 SolarNub. All rights reserved.</p>
+        <p>&copy; 2025 SolarNub. All rights reserved. | <a href="#" style="color: white; text-decoration: underline;">Privacy Policy</a> | <a href="#" style="color: white; text-decoration: underline;">Terms of Service</a></p>
     </footer>
 
+    <div class="detail-view" id="detail-view">
+        <div class="detail-content">
+            <img id="detail-image" src="" alt="Detail Image">
+            <h2 id="detail-title"></h2>
+            <p id="detail-description">This is a detailed description of the selected image. You can add more information here.</p>
+            <button class="close-btn" onclick="hideDetail()">Close</button>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <button class="chat-button" id="chat-button">
+            <i class="fas fa-comment"></i>
+        </button>
+    </div>
+
+    <a href="tel:0969600051" class="phone-button">
+        <i class="fas fa-phone"></i>
+    </a>
+
+    <button class="translation-toggle" id="translation-toggle">
+        <i class="fas fa-language"></i>
+        <span id="language-label">ไทย</span>
+    </button>
+
     <script>
+        // Loading Screen Logic
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loading-screen');
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 1000);
+            }, 1300);
+        });
+
+        // Hamburger Menu Logic
+        const hamburger = document.querySelector('.hamburger');
+        const mobileNav = document.getElementById('mobile-nav');
+        const overlay = document.getElementById('overlay');
+
+        function toggleMenu() {
+            hamburger.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // Close mobile menu when a link is clicked
+        const mobileLinks = document.querySelectorAll('.mobile-nav a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                toggleMenu();
+            });
+        });
+
+        // Footer Hide/Show on Scroll Logic
+        let lastScrollTop = 0;
+        const footer = document.querySelector('footer');
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > lastScrollTop) {
+                footer.classList.add('hide');
+            } else {
+                footer.classList.remove('hide');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        });
+
+        // Tab Logic
         function showTab(tabId) {
-            // Hide all tab contents
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
-            
-            // Show selected tab content
             document.getElementById(tabId).classList.add('active');
-            
-            // Update active tab button
+
             document.querySelectorAll('.tab-button').forEach(button => {
                 if (button.getAttribute('onclick').includes(tabId)) {
                     button.classList.add('active');
@@ -436,7 +1682,287 @@
                     button.classList.remove('active');
                 }
             });
+
+            // Scroll to top when changing tabs
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+
+            // Trigger scroll event to check visibility of elements
+            setTimeout(checkVisibility, 100);
         }
+
+        // Detailed View Logic
+        function showDetail(imageSrc, title) {
+            const detailView = document.getElementById('detail-view');
+            const detailImage = document.getElementById('detail-image');
+            const detailTitle = document.getElementById('detail-title');
+
+            detailImage.src = imageSrc;
+            detailTitle.textContent = title;
+            detailView.classList.add('active');
+        }
+
+        function hideDetail() {
+            const detailView = document.getElementById('detail-view');
+            detailView.classList.remove('active');
+        }
+
+        // Chat Button Functionality (placeholder for future Facebook integration)
+        document.getElementById('chat-button').addEventListener('click', function() {
+            alert('Chat functionality will be added soon with Facebook integration');
+        });
+
+        // Hero Slider Functionality
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        const dots = document.querySelectorAll('.hero-dot');
+        let slideInterval;
+
+        function showSlide(n) {
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            if (n >= slides.length) {
+                currentSlide = 0;
+            } else if (n < 0) {
+                currentSlide = slides.length - 1;
+            } else {
+                currentSlide = n;
+            }
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+            
+            resetTimer();
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function goToSlide(n) {
+            showSlide(n);
+        }
+
+        function resetTimer() {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 3000);
+        }
+
+        // Initialize the slider
+        document.addEventListener('DOMContentLoaded', () => {
+            slideInterval = setInterval(nextSlide, 3000);
+        });
+
+        // Pause slider when hovering
+        const heroSection = document.querySelector('.hero-section');
+        heroSection.addEventListener('mouseenter', () => {
+            clearInterval(slideInterval);
+        });
+
+        heroSection.addEventListener('mouseleave', () => {
+            resetTimer();
+        });
+
+        // FAQ Toggle Functionality
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const isActive = element.classList.contains('active');
+
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-question').forEach(question => {
+                if (question !== element) {
+                    question.classList.remove('active');
+                    question.nextElementSibling.style.display = 'none';
+                }
+            });
+
+            // Toggle current item
+            element.classList.toggle('active');
+            
+            if (isActive) {
+                answer.style.display = 'none';
+            } else {
+                answer.style.display = 'block';
+            }
+        }
+
+        // Scroll Animation Functionality
+        function checkVisibility() {
+            const elements = document.querySelectorAll('.benefit-card, .system-card, .spec-item, .cta-button, .info-section, .about-content, .about-section, .gallery-container, .timeline-item, .testimonial, .faq-item, .contact-form');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                } else {
+                    // Optionally remove 'visible' class if you want animations to trigger again
+                    // element.classList.remove('visible');
+                }
+            });
+        }
+
+        // Initialize visibility check on load and scroll
+        window.addEventListener('load', checkVisibility);
+        window.addEventListener('scroll', checkVisibility);
+
+        // Form submission
+        const contactForm = document.querySelector('.contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Thank you for your message! We will contact you shortly.');
+                this.reset();
+            }); 
+        }
+
+        // Translation Toggle Functionality
+        const translationToggle = document.getElementById('translation-toggle');
+        const languageLabel = document.getElementById('language-label');
+        let currentLanguage = 'en';
+
+        // Thai translations for all text elements
+        const thaiTranslations = {
+            // Home tab
+            "Power Your Future with Solar Energy": "พลังงานแสงอาทิตย์เพื่ออนาคตของคุณ",
+            "Join the sustainable energy revolution and take control of your power consumption with SolarNub's advanced solar solutions.": "ร่วมปฏิวัติพลังงานยั่งยืนและควบคุมการใช้พลังงานของคุณด้วยโซลูชั่นพลังงานแสงอาทิตย์ขั้นสูงจาก SolarNub",
+            "Explore Systems": "ดูระบบ",
+            "Save Money with Solar Power": "ประหยัดเงินด้วยพลังงานแสงอาทิตย์",
+            "Reduce your electricity bills by up to 70% with our efficient solar systems.": "ลดค่าไฟฟ้าของคุณได้สูงสุด 70% ด้วยระบบพลังงานแสงอาทิตย์ที่มีประสิทธิภาพของเรา",
+            "View Packages": "ดูแพ็คเกจ",
+            "Professional Installation": "การติดตั้งโดยมืออาชีพ",
+            "Get a Quote": "ขอใบเสนอราคา",
+            "Why Solar Power is Essential Today": "ทำไมพลังงานแสงอาทิตย์จึงสำคัญในปัจจุบัน",
+            "How Solar Energy Works": "พลังงานแสงอาทิตย์ทำงานอย่างไร",
+            "Financial Benefits": "ประโยชน์ทางการเงิน",
+            "Save up to 70% on your electricity bills. Solar panels typically pay for themselves within 5-7 years, providing free energy for decades afterward.": "ประหยัดค่าไฟฟ้าได้สูงสุด 70% แผงโซลาร์เซลล์มักจะคืนทุนภายใน 5-7 ปี และให้พลังงานฟรีเป็นเวลาหลายสิบปีหลังจากนั้น",
+            "Environmental Impact": "ผลกระทบต่อสิ่งแวดล้อม",
+            "A typical 5kW system prevents 3-4 tons of carbon emissions annually - equivalent to planting 100 trees each year.": "ระบบ 5kW ปกติช่วยลดการปล่อยคาร์บอนได้ 3-4 ตันต่อปี - เทียบเท่าการปลูกต้นไม้ 100 ต้นในแต่ละปี",
+            "Property Value": "มูลค่าทรัพย์สิน",
+            "Homes with solar installations see an average 4.1% increase in property value and typically sell 20% faster than non-solar homes.": "บ้านที่มีระบบพลังงานแสงอาทิตย์มีมูลค่าเพิ่มขึ้นโดยเฉลี่ย 4.1% และมักขายได้เร็วกว่า 20% เมื่อเทียบกับบ้านที่ไม่มีระบบ",
+            "Energy Independence": "พลังงานอิสระ",
+            "Protect yourself from rising energy costs and grid outages. Generate your own clean energy and reduce dependence on traditional power sources.": "ป้องกันตัวเองจากค่าไฟฟ้าที่เพิ่มขึ้นและไฟฟ้าดับ สร้างพลังงานสะอาดของคุณเองและลดการพึ่งพาแหล่งพลังงานแบบดั้งเดิม",
+            "Why Choose Solar Now?": "ทำไมต้องเลือกพลังงานแสงอาทิตย์ตอนนี้?",
+            "Solar technology has never been more accessible or efficient. With electricity costs rising by an average of 3-5% annually, solar power offers a smart, sustainable solution for your energy needs.": "เทคโนโลยีพลังงานแสงอาทิตย์ไม่เคยเข้าถึงได้ง่ายหรือมีประสิทธิภาพมากไปกว่านี้ ด้วยค่าไฟฟ้าที่เพิ่มขึ้นเฉลี่ย 3-5% ต่อปี พลังงานแสงอาทิตย์เสนอทางออกที่ชาญฉลาดและยั่งยืนสำหรับความต้องการพลังงานของคุณ",
+            "Government incentives and tax breaks available": "มีสิ่งจูงใจจากรัฐบาลและลดหย่อนภาษี",
+            "Modern panels are 95% more efficient than early models": "แผงสมัยใหม่มีประสิทธิภาพมากกว่าแบบเก่าถึง 95%",
+            "25-year warranty on most systems": "รับประกัน 25 ปีสำหรับระบบส่วนใหญ่",
+            "Professional installation and ongoing support": "การติดตั้งโดยมืออาชีพและการสนับสนุนอย่างต่อเนื่อง",
+            "View 5kW Systems": "ดูระบบ 5kW",
+            "View 10kW Systems": "ดูระบบ 10kW",
+            
+            // 5kW tab
+            "5kW Solar Systems": "ระบบพลังงานแสงอาทิตย์ 5kW",
+            "5kW Premium Solar Package": "แพ็คเกจพลังงานแสงอาทิตย์ระดับพรีเมียม 5kW",
+            "Perfect for small to medium-sized homes, our 5kW system provides excellent energy coverage for typical household needs.": "เหมาะสำหรับบ้านขนาดเล็กถึงกลาง ระบบ 5kW ของเรามอบความครอบคลุมพลังงานที่ยอดเยี่ยมสำหรับความต้องการทั่วไปของครัวเรือน",
+            "15-18 Panels": "แผง 15-18 แผ่น",
+            "High-efficiency panels": "แผงประสิทธิภาพสูง",
+            "20-25 kWh/day": "20-25 กิโลวัตต์ชั่วโมง/วัน",
+            "Average production": "การผลิตโดยเฉลี่ย",
+            "2-3 Bedroom": "2-3 ห้องนอน",
+            "Ideal home size": "ขนาดบ้านที่เหมาะสม",
+            "Optional Storage": "ที่เก็บพลังงานเสริม",
+            "Battery backup available": "มีแบตเตอรี่สำรอง",
+            
+            // 10kW tab
+            "10kW Solar Systems": "ระบบพลังงานแสงอาทิตย์ 10kW",
+            "10kW Premium Solar Package": "แพ็คเกจพลังงานแสงอาทิตย์ระดับพรีเมียม 10kW",
+            "Ideal for larger homes or small businesses, our 10kW system provides comprehensive energy coverage for substantial power needs.": "เหมาะสำหรับบ้านขนาดใหญ่หรือธุรกิจขนาดเล็ก ระบบ 10kW ของเรามอบความครอบคลุมพลังงานที่ครอบคลุมสำหรับความต้องการพลังงานที่สำคัญ",
+            "30-36 Panels": "แผง 30-36 แผ่น",
+            "40-50 kWh/day": "40-50 กิโลวัตต์ชั่วโมง/วัน",
+            "4-5 Bedroom": "4-5 ห้องนอน",
+            
+            // About tab
+            "About SolarNub": "เกี่ยวกับ SolarNub",
+            "Our Mission": "พันธกิจของเรา",
+            "At SolarNub, we're committed to accelerating the world's transition to sustainable energy. Founded in 2015, we've grown from a small startup to a leading provider of residential and commercial solar solutions across the region. Our mission is to make solar energy accessible, affordable, and easy to adopt for everyone.": "ที่ SolarNub เราให้คำมั่นที่จะเร่งการเปลี่ยนผ่านของโลกไปสู่พลังงานที่ยั่งยืน ก่อตั้งในปี 2015 เราเติบโตจากสตาร์ทอัพเล็กๆ เป็นผู้ให้บริการโซลูชั่นพลังงานแสงอาทิตย์สำหรับที่อยู่อาศัยและธุรกิจชั้นนำในภูมิภาค พันธกิจของเราคือทำให้พลังงานแสงอาทิตย์เข้าถึงได้ ราคาไม่แพง และนำไปใช้ได้ง่ายสำหรับทุกคน",
+            "Our Story": "เรื่องราวของเรา",
+            "SolarNub began when our founder, Alex Johnson, installed his first solar panel system and realized how needlessly complex and expensive the process was. Determined to make solar energy more accessible, he assembled a team of engineers, energy experts, and customer service professionals to create a better solar experience.": "SolarNub เริ่มต้นเมื่อผู้ก่อตั้งของเรา Alex Johnson ติดตั้งระบบแผงโซลาร์เซลล์ครั้งแรกและตระหนักว่ากระบวนการนี้ซับซ้อนและมีราคาแพงโดยไม่จำเป็น ด้วยความมุ่งมั่นที่จะทำให้พลังงานแสงอาทิตย์เข้าถึงได้ง่ายขึ้น เขาจึงรวบรวมทีมวิศวกร ผู้เชี่ยวชาญด้านพลังงาน และผู้เชี่ยวชาญด้านบริการลูกค้าเพื่อสร้างประสบการณ์พลังงานแสงอาทิตย์ที่ดีขึ้น",
+            "What started as a three-person operation in a small garage has grown into a company with over 150 employees serving thousands of satisfied customers. Despite our growth, we've maintained our commitment to personalized service and high-quality installations.": "สิ่งที่เริ่มต้นจากการดำเนินงานสามคนในโรงรถเล็กๆ ได้เติบโตเป็นบริษัทที่มีพนักงานกว่า 150 คน ให้บริการลูกค้าที่พึงพอใจหลายพันราย แม้จะมีการเติบโต แต่เรายังคงยึดมั่นในบริการส่วนบุคคลและการติดตั้งคุณภาพสูง",
+            "Why Choose Us": "ทำไมต้องเลือกเรา",
+            "Certified Excellence": "ความเป็นเลิศที่ได้รับการรับรอง",
+            "All our installers are NABCEP-certified, ensuring the highest quality workmanship and system performance.": "ผู้ติดตั้งทั้งหมดของเราได้รับการรับรอง NABCEP เพื่อรับรองฝีมือและการทำงานของระบบที่มีคุณภาพสูงสุด",
+            "25-Year Warranty": "รับประกัน 25 ปี",
+            "We stand behind our work with industry-leading warranties on both equipment and installation.": "เรารับประกันงานของเราด้วยการรับประกันชั้นนำของอุตสาหกรรมทั้งอุปกรณ์และการติดตั้ง",
+            "Price Match Guarantee": "รับประกันราคาเท่ากัน",
+            "We'll match any legitimate written quote for comparable equipment and service.": "เราจะเสนอราคาให้เท่ากับใบเสนอราคาเป็นทางการใดๆ สำหรับอุปกรณ์และบริการที่เทียบเท่า",
+            "Performance Monitoring": "การตรวจสอบประสิทธิภาพ",
+            "Our smart monitoring systems ensure your system is always performing at its best.": "ระบบตรวจสอบอัจฉริยะของเรารับรองว่าระบบของคุณทำงานได้ดีที่สุดเสมอ",
+            
+            // Contact tab
+            "Contact SolarNub": "ติดต่อ SolarNub",
+            "Name": "ชื่อ",
+            "Email": "อีเมล",
+            "Phone": "โทรศัพท์",
+            "Interested System Size": "ขนาดระบบที่สนใจ",
+            "Your Message": "ข้อความของคุณ",
+            "Submit": "ส่ง",
+            "Visit Our Office": "เยี่ยมชมสำนักงานของเรา",
+            "Headquarters": "สำนักงานใหญ่",
+            "123 Solar Way\nSunnyville, CA 90210\nUnited States": "123 ถนนโซลาร์\nซันนี่วิลล์, CA 90210\nสหรัฐอเมริกา",
+            "Business Hours": "เวลาทำการ",
+            "Monday-Friday: 8am-6pm\nSaturday: 9am-2pm\nSunday: Closed": "จันทร์-ศุกร์: 8:00-18:00\nเสาร์: 9:00-14:00\nอาทิตย์: ปิด",
+            "Contact Info": "ข้อมูลติดต่อ",
+            "Phone: (800) 555-SOLAR\nEmail: info@solarNub.com\nEmergency: (800) 555-HELP": "โทรศัพท์: (800) 555-SOLAR\nอีเมล: info@solarNub.com\nฉุกเฉิน: (800) 555-HELP",
+            
+            // Footer
+            "© 2025 SolarNub. All rights reserved.": "© 2025 SolarNub สงวนลิขสิทธิ์"
+        };
+
+        // Function to toggle between languages
+        function toggleLanguage() {
+            const allTextElements = document.querySelectorAll('h1, h2, h3, p, span, a, button, label, th, td, li');
+            
+            if (currentLanguage === 'en') {
+                // Switch to Thai
+                allTextElements.forEach(element => {
+                    const originalText = element.textContent.trim();
+                    if (thaiTranslations[originalText]) {
+                        // Create a Thai version element
+                        const thaiElement = document.createElement('span');
+                        thaiElement.className = 'lang-th';
+                        thaiElement.textContent = thaiTranslations[originalText];
+                        
+                        // Wrap original English text
+                        const englishElement = document.createElement('span');
+                        englishElement.className = 'lang-en';
+                        englishElement.textContent = originalText;
+                        
+                        // Replace the element with both versions
+                        element.innerHTML = '';
+                        element.appendChild(englishElement);
+                        element.appendChild(thaiElement);
+                    }
+                });
+                
+                // Trigger the transition
+                setTimeout(() => {
+                    document.querySelectorAll('.lang-en').forEach(el => el.classList.add('hidden'));
+                    document.querySelectorAll('.lang-th').forEach(el => el.classList.add('visible'));
+                    languageLabel.textContent = 'ENG';
+                    currentLanguage = 'th';
+                    translationToggle.classList.add('active');
+                }, 10);
+            } else {
+                // Switch back to English
+                document.querySelectorAll('.lang-en').forEach(el => el.classList.remove('hidden'));
+                document.querySelectorAll('.lang-th').forEach(el => el.classList.remove('visible'));
+                languageLabel.textContent = 'ไทย';
+                currentLanguage = 'en';
+                translationToggle.classList.remove('active');
+            }
+        }
+
+        // Initialize the translation toggle
+        translationToggle.addEventListener('click', toggleLanguage);
     </script>
 </body>
 </html>
