@@ -395,6 +395,7 @@
             position: fixed;
             bottom: 0;
             left: 0;
+            height: 90px;
             width: 100%;
             transition: transform 0.3s ease-in-out;
             display: flex;
@@ -964,6 +965,64 @@
             .system-card {
                 grid-template-columns: 1fr;
             }
+        }
+
+        /* Translation Button Styles */
+        .translation-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .translation-toggle:hover {
+            transform: scale(1.05);
+            background-color: #1a2a3a;
+        }
+
+        .translation-toggle i {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .translation-toggle.active i {
+            transform: rotate(180deg);
+        }
+
+        /* Language-specific classes */
+        .lang-th {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .lang-th.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .lang-en {
+            display: block;
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .lang-en.hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
         }
     </style>
 </head>
@@ -1559,6 +1618,11 @@
         <i class="fas fa-phone"></i>
     </a>
 
+    <button class="translation-toggle" id="translation-toggle">
+        <i class="fas fa-language"></i>
+        <span id="language-label">ไทย</span>
+    </button>
+
     <script>
         // Loading Screen Logic
         window.addEventListener('load', () => {
@@ -1759,6 +1823,146 @@
                 this.reset();
             }); 
         }
+
+        // Translation Toggle Functionality
+        const translationToggle = document.getElementById('translation-toggle');
+        const languageLabel = document.getElementById('language-label');
+        let currentLanguage = 'en';
+
+        // Thai translations for all text elements
+        const thaiTranslations = {
+            // Home tab
+            "Power Your Future with Solar Energy": "พลังงานแสงอาทิตย์เพื่ออนาคตของคุณ",
+            "Join the sustainable energy revolution and take control of your power consumption with SolarNub's advanced solar solutions.": "ร่วมปฏิวัติพลังงานยั่งยืนและควบคุมการใช้พลังงานของคุณด้วยโซลูชั่นพลังงานแสงอาทิตย์ขั้นสูงจาก SolarNub",
+            "Explore Systems": "ดูระบบ",
+            "Save Money with Solar Power": "ประหยัดเงินด้วยพลังงานแสงอาทิตย์",
+            "Reduce your electricity bills by up to 70% with our efficient solar systems.": "ลดค่าไฟฟ้าของคุณได้สูงสุด 70% ด้วยระบบพลังงานแสงอาทิตย์ที่มีประสิทธิภาพของเรา",
+            "View Packages": "ดูแพ็คเกจ",
+            "Professional Installation": "การติดตั้งโดยมืออาชีพ",
+            "Get a Quote": "ขอใบเสนอราคา",
+            "Why Solar Power is Essential Today": "ทำไมพลังงานแสงอาทิตย์จึงสำคัญในปัจจุบัน",
+            "How Solar Energy Works": "พลังงานแสงอาทิตย์ทำงานอย่างไร",
+            "Financial Benefits": "ประโยชน์ทางการเงิน",
+            "Save up to 70% on your electricity bills. Solar panels typically pay for themselves within 5-7 years, providing free energy for decades afterward.": "ประหยัดค่าไฟฟ้าได้สูงสุด 70% แผงโซลาร์เซลล์มักจะคืนทุนภายใน 5-7 ปี และให้พลังงานฟรีเป็นเวลาหลายสิบปีหลังจากนั้น",
+            "Environmental Impact": "ผลกระทบต่อสิ่งแวดล้อม",
+            "A typical 5kW system prevents 3-4 tons of carbon emissions annually - equivalent to planting 100 trees each year.": "ระบบ 5kW ปกติช่วยลดการปล่อยคาร์บอนได้ 3-4 ตันต่อปี - เทียบเท่าการปลูกต้นไม้ 100 ต้นในแต่ละปี",
+            "Property Value": "มูลค่าทรัพย์สิน",
+            "Homes with solar installations see an average 4.1% increase in property value and typically sell 20% faster than non-solar homes.": "บ้านที่มีระบบพลังงานแสงอาทิตย์มีมูลค่าเพิ่มขึ้นโดยเฉลี่ย 4.1% และมักขายได้เร็วกว่า 20% เมื่อเทียบกับบ้านที่ไม่มีระบบ",
+            "Energy Independence": "พลังงานอิสระ",
+            "Protect yourself from rising energy costs and grid outages. Generate your own clean energy and reduce dependence on traditional power sources.": "ป้องกันตัวเองจากค่าไฟฟ้าที่เพิ่มขึ้นและไฟฟ้าดับ สร้างพลังงานสะอาดของคุณเองและลดการพึ่งพาแหล่งพลังงานแบบดั้งเดิม",
+            "Why Choose Solar Now?": "ทำไมต้องเลือกพลังงานแสงอาทิตย์ตอนนี้?",
+            "Solar technology has never been more accessible or efficient. With electricity costs rising by an average of 3-5% annually, solar power offers a smart, sustainable solution for your energy needs.": "เทคโนโลยีพลังงานแสงอาทิตย์ไม่เคยเข้าถึงได้ง่ายหรือมีประสิทธิภาพมากไปกว่านี้ ด้วยค่าไฟฟ้าที่เพิ่มขึ้นเฉลี่ย 3-5% ต่อปี พลังงานแสงอาทิตย์เสนอทางออกที่ชาญฉลาดและยั่งยืนสำหรับความต้องการพลังงานของคุณ",
+            "Government incentives and tax breaks available": "มีสิ่งจูงใจจากรัฐบาลและลดหย่อนภาษี",
+            "Modern panels are 95% more efficient than early models": "แผงสมัยใหม่มีประสิทธิภาพมากกว่าแบบเก่าถึง 95%",
+            "25-year warranty on most systems": "รับประกัน 25 ปีสำหรับระบบส่วนใหญ่",
+            "Professional installation and ongoing support": "การติดตั้งโดยมืออาชีพและการสนับสนุนอย่างต่อเนื่อง",
+            "View 5kW Systems": "ดูระบบ 5kW",
+            "View 10kW Systems": "ดูระบบ 10kW",
+            
+            // 5kW tab
+            "5kW Solar Systems": "ระบบพลังงานแสงอาทิตย์ 5kW",
+            "5kW Premium Solar Package": "แพ็คเกจพลังงานแสงอาทิตย์ระดับพรีเมียม 5kW",
+            "Perfect for small to medium-sized homes, our 5kW system provides excellent energy coverage for typical household needs.": "เหมาะสำหรับบ้านขนาดเล็กถึงกลาง ระบบ 5kW ของเรามอบความครอบคลุมพลังงานที่ยอดเยี่ยมสำหรับความต้องการทั่วไปของครัวเรือน",
+            "15-18 Panels": "แผง 15-18 แผ่น",
+            "High-efficiency panels": "แผงประสิทธิภาพสูง",
+            "20-25 kWh/day": "20-25 กิโลวัตต์ชั่วโมง/วัน",
+            "Average production": "การผลิตโดยเฉลี่ย",
+            "2-3 Bedroom": "2-3 ห้องนอน",
+            "Ideal home size": "ขนาดบ้านที่เหมาะสม",
+            "Optional Storage": "ที่เก็บพลังงานเสริม",
+            "Battery backup available": "มีแบตเตอรี่สำรอง",
+            
+            // 10kW tab
+            "10kW Solar Systems": "ระบบพลังงานแสงอาทิตย์ 10kW",
+            "10kW Premium Solar Package": "แพ็คเกจพลังงานแสงอาทิตย์ระดับพรีเมียม 10kW",
+            "Ideal for larger homes or small businesses, our 10kW system provides comprehensive energy coverage for substantial power needs.": "เหมาะสำหรับบ้านขนาดใหญ่หรือธุรกิจขนาดเล็ก ระบบ 10kW ของเรามอบความครอบคลุมพลังงานที่ครอบคลุมสำหรับความต้องการพลังงานที่สำคัญ",
+            "30-36 Panels": "แผง 30-36 แผ่น",
+            "40-50 kWh/day": "40-50 กิโลวัตต์ชั่วโมง/วัน",
+            "4-5 Bedroom": "4-5 ห้องนอน",
+            
+            // About tab
+            "About SolarNub": "เกี่ยวกับ SolarNub",
+            "Our Mission": "พันธกิจของเรา",
+            "At SolarNub, we're committed to accelerating the world's transition to sustainable energy. Founded in 2015, we've grown from a small startup to a leading provider of residential and commercial solar solutions across the region. Our mission is to make solar energy accessible, affordable, and easy to adopt for everyone.": "ที่ SolarNub เราให้คำมั่นที่จะเร่งการเปลี่ยนผ่านของโลกไปสู่พลังงานที่ยั่งยืน ก่อตั้งในปี 2015 เราเติบโตจากสตาร์ทอัพเล็กๆ เป็นผู้ให้บริการโซลูชั่นพลังงานแสงอาทิตย์สำหรับที่อยู่อาศัยและธุรกิจชั้นนำในภูมิภาค พันธกิจของเราคือทำให้พลังงานแสงอาทิตย์เข้าถึงได้ ราคาไม่แพง และนำไปใช้ได้ง่ายสำหรับทุกคน",
+            "Our Story": "เรื่องราวของเรา",
+            "SolarNub began when our founder, Alex Johnson, installed his first solar panel system and realized how needlessly complex and expensive the process was. Determined to make solar energy more accessible, he assembled a team of engineers, energy experts, and customer service professionals to create a better solar experience.": "SolarNub เริ่มต้นเมื่อผู้ก่อตั้งของเรา Alex Johnson ติดตั้งระบบแผงโซลาร์เซลล์ครั้งแรกและตระหนักว่ากระบวนการนี้ซับซ้อนและมีราคาแพงโดยไม่จำเป็น ด้วยความมุ่งมั่นที่จะทำให้พลังงานแสงอาทิตย์เข้าถึงได้ง่ายขึ้น เขาจึงรวบรวมทีมวิศวกร ผู้เชี่ยวชาญด้านพลังงาน และผู้เชี่ยวชาญด้านบริการลูกค้าเพื่อสร้างประสบการณ์พลังงานแสงอาทิตย์ที่ดีขึ้น",
+            "What started as a three-person operation in a small garage has grown into a company with over 150 employees serving thousands of satisfied customers. Despite our growth, we've maintained our commitment to personalized service and high-quality installations.": "สิ่งที่เริ่มต้นจากการดำเนินงานสามคนในโรงรถเล็กๆ ได้เติบโตเป็นบริษัทที่มีพนักงานกว่า 150 คน ให้บริการลูกค้าที่พึงพอใจหลายพันราย แม้จะมีการเติบโต แต่เรายังคงยึดมั่นในบริการส่วนบุคคลและการติดตั้งคุณภาพสูง",
+            "Why Choose Us": "ทำไมต้องเลือกเรา",
+            "Certified Excellence": "ความเป็นเลิศที่ได้รับการรับรอง",
+            "All our installers are NABCEP-certified, ensuring the highest quality workmanship and system performance.": "ผู้ติดตั้งทั้งหมดของเราได้รับการรับรอง NABCEP เพื่อรับรองฝีมือและการทำงานของระบบที่มีคุณภาพสูงสุด",
+            "25-Year Warranty": "รับประกัน 25 ปี",
+            "We stand behind our work with industry-leading warranties on both equipment and installation.": "เรารับประกันงานของเราด้วยการรับประกันชั้นนำของอุตสาหกรรมทั้งอุปกรณ์และการติดตั้ง",
+            "Price Match Guarantee": "รับประกันราคาเท่ากัน",
+            "We'll match any legitimate written quote for comparable equipment and service.": "เราจะเสนอราคาให้เท่ากับใบเสนอราคาเป็นทางการใดๆ สำหรับอุปกรณ์และบริการที่เทียบเท่า",
+            "Performance Monitoring": "การตรวจสอบประสิทธิภาพ",
+            "Our smart monitoring systems ensure your system is always performing at its best.": "ระบบตรวจสอบอัจฉริยะของเรารับรองว่าระบบของคุณทำงานได้ดีที่สุดเสมอ",
+            
+            // Contact tab
+            "Contact SolarNub": "ติดต่อ SolarNub",
+            "Name": "ชื่อ",
+            "Email": "อีเมล",
+            "Phone": "โทรศัพท์",
+            "Interested System Size": "ขนาดระบบที่สนใจ",
+            "Your Message": "ข้อความของคุณ",
+            "Submit": "ส่ง",
+            "Visit Our Office": "เยี่ยมชมสำนักงานของเรา",
+            "Headquarters": "สำนักงานใหญ่",
+            "123 Solar Way\nSunnyville, CA 90210\nUnited States": "123 ถนนโซลาร์\nซันนี่วิลล์, CA 90210\nสหรัฐอเมริกา",
+            "Business Hours": "เวลาทำการ",
+            "Monday-Friday: 8am-6pm\nSaturday: 9am-2pm\nSunday: Closed": "จันทร์-ศุกร์: 8:00-18:00\nเสาร์: 9:00-14:00\nอาทิตย์: ปิด",
+            "Contact Info": "ข้อมูลติดต่อ",
+            "Phone: (800) 555-SOLAR\nEmail: info@solarNub.com\nEmergency: (800) 555-HELP": "โทรศัพท์: (800) 555-SOLAR\nอีเมล: info@solarNub.com\nฉุกเฉิน: (800) 555-HELP",
+            
+            // Footer
+            "© 2025 SolarNub. All rights reserved.": "© 2025 SolarNub สงวนลิขสิทธิ์"
+        };
+
+        // Function to toggle between languages
+        function toggleLanguage() {
+            const allTextElements = document.querySelectorAll('h1, h2, h3, p, span, a, button, label, th, td, li');
+            
+            if (currentLanguage === 'en') {
+                // Switch to Thai
+                allTextElements.forEach(element => {
+                    const originalText = element.textContent.trim();
+                    if (thaiTranslations[originalText]) {
+                        // Create a Thai version element
+                        const thaiElement = document.createElement('span');
+                        thaiElement.className = 'lang-th';
+                        thaiElement.textContent = thaiTranslations[originalText];
+                        
+                        // Wrap original English text
+                        const englishElement = document.createElement('span');
+                        englishElement.className = 'lang-en';
+                        englishElement.textContent = originalText;
+                        
+                        // Replace the element with both versions
+                        element.innerHTML = '';
+                        element.appendChild(englishElement);
+                        element.appendChild(thaiElement);
+                    }
+                });
+                
+                // Trigger the transition
+                setTimeout(() => {
+                    document.querySelectorAll('.lang-en').forEach(el => el.classList.add('hidden'));
+                    document.querySelectorAll('.lang-th').forEach(el => el.classList.add('visible'));
+                    languageLabel.textContent = 'ENG';
+                    currentLanguage = 'th';
+                    translationToggle.classList.add('active');
+                }, 10);
+            } else {
+                // Switch back to English
+                document.querySelectorAll('.lang-en').forEach(el => el.classList.remove('hidden'));
+                document.querySelectorAll('.lang-th').forEach(el => el.classList.remove('visible'));
+                languageLabel.textContent = 'ไทย';
+                currentLanguage = 'en';
+                translationToggle.classList.remove('active');
+            }
+        }
+
+        // Initialize the translation toggle
+        translationToggle.addEventListener('click', toggleLanguage);
     </script>
 </body>
 </html>
